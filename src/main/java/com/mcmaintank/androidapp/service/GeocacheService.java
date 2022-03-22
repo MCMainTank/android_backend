@@ -15,5 +15,7 @@ public interface GeocacheService {
 
     public int createGeocacheEntry(Geocache geocache);
 
+    public Geocache getGeocacheByUser(Long userId);
+
     public Geocache getNearestGeocache(Double latitudes, Double longitudes);
 }

@@ -32,4 +32,12 @@ public class Geocache {
 
     private Date geocacheDateOfUpload;
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Geocache) {
+            return (geocacheId == ((Geocache) o).geocacheId);
+        }
+        return false;
+    }
+
 }

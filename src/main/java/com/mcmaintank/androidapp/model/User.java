@@ -25,4 +25,11 @@ public class User {
 
     private Integer userGroup;
 
+    public boolean equals(Object o) {
+        if (o instanceof User) {
+            return (userName == ((User) o).userName);
+        }
+        return false;
+    }
+
 }

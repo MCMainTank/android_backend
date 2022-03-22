@@ -4,12 +4,15 @@ import com.mcmaintank.androidapp.mapper.UserMapper;
 import com.mcmaintank.androidapp.model.User;
 import com.mcmaintank.androidapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.stereotype.Service;
 
 /**
  * @author MCMainTank
  * @version 1.0
  * @date 2022-01-9 16:13
  */
+@Service
 public class UserServiceImpl implements UserService {
 
     private static final String SALT = "MCMTproduce5Fx";

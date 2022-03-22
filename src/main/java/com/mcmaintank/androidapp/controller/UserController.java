@@ -4,6 +4,7 @@ import com.mcmaintank.androidapp.model.User;
 import com.mcmaintank.androidapp.service.UserService;
 import com.mcmaintank.androidapp.utils.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,10 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 
-@RestController
+@Controller
 public class UserController {
 
+    @Autowired
     UserService userService;
 
     EncryptUtil encryptUtil = new EncryptUtil();
@@ -87,6 +89,7 @@ public class UserController {
                                 User user = new User();
                                 user.setUserName(username);
                                 user.setUserPassword(encryptUtil.encrypt(password));
+                                user.setUserGroup(0);
                                 if(userService.createUser(user)==1){
                                     return "Success!";
                                 }else {
