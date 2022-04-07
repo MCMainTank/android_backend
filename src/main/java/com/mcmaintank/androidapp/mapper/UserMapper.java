@@ -1,10 +1,7 @@
 package com.mcmaintank.androidapp.mapper;
 
 import com.mcmaintank.androidapp.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -28,5 +25,13 @@ public interface UserMapper {
     @Select("select user_password from t_user_info where user_name = #{userName}")
     String getPassword(String userName);
 
+    @Select("select user_group from t_user_info where user_name = #{userName}")
+    int selectUserGroupByName(@Param("userName")String userName);
+
+    @Update("update t_user_info set deleted = 1 where user_id = #{userId}")
+    int logicDeleteUser(@Param("userId")Long userId);
+
+    @Select("select deleted from t_user_info where user_name = #{userName}")
+    int getDeleted(@Param("userName")String userName);
 
 }

@@ -4,7 +4,6 @@ import com.mcmaintank.androidapp.mapper.UserMapper;
 import com.mcmaintank.androidapp.model.User;
 import com.mcmaintank.androidapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Service;
 
 /**
@@ -45,4 +44,20 @@ public class UserServiceImpl implements UserService {
             return 0;
         }
     }
+
+    @Override
+    public int getUserGroupByName(String username) {
+        return userMapper.selectUserGroupByName(username);
+    }
+
+    @Override
+    public int getDeleted(String username){
+        return userMapper.getDeleted(username);
+    }
+
+    @Override
+    public int logicDeleteUser(Long userId){
+        return userMapper.logicDeleteUser(userId);
+    }
+
 }

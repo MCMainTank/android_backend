@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * @author MCMainTank
  * @date 2022-01-11 0:34
@@ -43,8 +45,11 @@ public class UserController {
         String username = (String) o.get("username");
         String password = (String) o.get("password");
 
-        if(!StringUtils.isEmpty(username)&&(userService.getPassword(username)).equals(encryptUtil.encrypt(password))){
+        if(!StringUtils.isEmpty(username)&&(userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getUserGroupByName(username)==0&&userService.getDeleted(username)==0){
             String jsonString1 = "{\"kstatus\":1}";
+            return jsonString1;
+        }else if(!StringUtils.isEmpty(username)&&(userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getUserGroupByName(username)==1){
+            String jsonString1 = "{\"kstatus\":2}";
             return jsonString1;
         }else{
             System.out.println(username+password);
@@ -106,6 +111,35 @@ public class UserController {
         }
 //        return "username taken";
 //        return "success";
+    }
+
+    @RequestMapping("searchForUser")
+    @ResponseBody
+    public User searchForUser(@RequestBody Map o){
+        Integer isAdmin = parseInt((String) o.get("isAdmin"));
+        if(isAdmin==1){
+            return userService.getUser(Long.parseLong((String) o.get("userId")));
+        }
+        else return null;
+    }
+
+    @RequestMapping("deleteUser")
+    @ResponseBody
+    public String deleteUser(@RequestBody Map o){
+        Integer isAdmin = parseInt((String) o.get("isAdmin"));
+        if(isAdmin==1){
+            if(userService.logicDeleteUser(Long.parseLong((String) o.get("userId")))==1){
+                String jsonString1 = "{\"kstatus\":1}";
+                return jsonString1;
+            } else {
+                String jsonString1 = "{\"kstatus\":2}";
+                return jsonString1;
+            }
+        } else {
+            String jsonString1 = "{\"kstatus\":0}";
+            return jsonString1;
+        }
+
     }
 
 }

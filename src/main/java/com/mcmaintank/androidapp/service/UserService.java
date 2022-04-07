@@ -16,4 +16,10 @@ public interface UserService {
     public String getPassword(String username);
 
     public int createUser(User user);
+
+    public int getUserGroupByName(String username);
+
+    int getDeleted(String username);
+
+    int logicDeleteUser(Long userId);
 }

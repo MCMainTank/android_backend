@@ -6,7 +6,7 @@ import com.mcmaintank.androidapp.service.GeocacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.List;
 
 /**
  * @author MCMainTank
@@ -34,13 +34,28 @@ public class GeocacheServiceImpl implements GeocacheService {
     }
 
     @Override
-    public Geocache getGeocacheByUser(Long userId) {
+    public List<Geocache> getGeocacheByUser(Long userId) {
         return geocacheMapper.selectGeocacheByUserId(userId);
+    }
+
+    @Override
+    public int getLatestGeocacheIdByUser(Long userId) {
+        return geocacheMapper.selectLatestGeocacheIdByUserId(userId);
     }
 
     @Override
     public Geocache getNearestGeocache(Double latitudes, Double longitudes) {
         return null;
+    }
+
+    @Override
+    public int getDeleted(Long geocacheId){
+        return geocacheMapper.getDeleted(geocacheId);
+    }
+
+    @Override
+    public int logicDeleteGeocache(Long geocacheId){
+        return geocacheMapper.logicDeleteGeocache(geocacheId);
     }
 
 

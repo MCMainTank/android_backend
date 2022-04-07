@@ -1,11 +1,10 @@
 package com.mcmaintank.androidapp.mapper;
 
 import com.mcmaintank.androidapp.model.Geocache;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author MCMainTank
@@ -21,10 +20,21 @@ public interface GeocacheMapper {
     int insertGeocache(Geocache geocache);
 
     @Select("select * from t_geocache_info where geocache_id = #{geocacheId}")
-    Geocache selectGeocacheById(@Param("geocahceId")Long geocacheId);
+    Geocache selectGeocacheById(@Param("geocacheId")Long geocacheId);
 
     @Select("select * from t_geocache_info where pid = #{userId} and deleted = 0")
-    Geocache selectGeocacheByUserId(@Param("userId")Long userId);
+    List<Geocache> selectGeocacheByUserId(@Param("userId")Long userId);
+
+    @Select("select max(geocache_id) from t_geocache_info where pid = #{userId} and deleted = 0")
+    int selectLatestGeocacheIdByUserId(@Param("userId")Long userId);
+
+    @Update("update t_geocache_info set deleted = 1 where geocache_id = #{geocacheId}")
+    int logicDeleteGeocache(@Param("geocacheId")Long geocacheId);
+
+    @Select("select deleted from t_geocache_info where user_name = #{geocacheId}")
+    int getDeleted(@Param("geocacheId")Long geocacheId);
+
+
 
 
 }

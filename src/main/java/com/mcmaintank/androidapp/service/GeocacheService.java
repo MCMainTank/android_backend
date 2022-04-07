@@ -3,6 +3,7 @@ package com.mcmaintank.androidapp.service;
 import com.mcmaintank.androidapp.model.Geocache;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * @author MCMainTank
@@ -15,7 +16,13 @@ public interface GeocacheService {
 
     public int createGeocacheEntry(Geocache geocache);
 
-    public Geocache getGeocacheByUser(Long userId);
+    public List<Geocache> getGeocacheByUser(Long userId);
+
+    int getLatestGeocacheIdByUser(Long userId);
 
     public Geocache getNearestGeocache(Double latitudes, Double longitudes);
+
+    int getDeleted(Long geocacheId);
+
+    int logicDeleteGeocache(Long geocacheId);
 }
