@@ -24,5 +24,7 @@ public interface GeocacheService {
 
     int getDeleted(Long geocacheId);
 
+    public List<Geocache> getTopTenReportedGeocaches();
+
     int logicDeleteGeocache(Long geocacheId);
 }

@@ -54,6 +54,11 @@ public class GeocacheServiceImpl implements GeocacheService {
     }
 
     @Override
+    public List<Geocache> getTopTenReportedGeocaches() {
+        return geocacheMapper.selectTopTenReportedGeocaches();
+    }
+
+    @Override
     public int logicDeleteGeocache(Long geocacheId){
         return geocacheMapper.logicDeleteGeocache(geocacheId);
     }

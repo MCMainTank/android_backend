@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Integer.parseInt;
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 /**
  * @author MCMainTank
@@ -45,17 +46,19 @@ public class GeocacheController {
 
     @RequestMapping(value = "getGeocacheByUserId")
     @ResponseBody
-    public List<Geocache> getGeocacheByUserId(@RequestParam("pid") Long pid){
+    public List<Geocache> getGeocacheByUserName(@RequestBody Map o){
+        String username = (String) o.get("username");
+        Long pid = userService.getUserByName(username).getUserId();
         List<Geocache> geocacheList = geocacheService.getGeocacheByUser(pid);
         return geocacheList;
     }
 
     @RequestMapping(value = "createGeocache")
     @ResponseBody
-    public int createGeocache(@RequestBody Map o){
+    public String createGeocache(@RequestBody Map o){
         Geocache geocache = new Geocache();
-        geocache.setGeocacheLatitudes((Double) o.get("Latitudes"));
-        geocache.setGeocacheLongitudes((Double) o.get("Longitudes"));
+        geocache.setGeocacheLatitudes(Double.valueOf((String) o.get("Latitudes")).doubleValue());
+        geocache.setGeocacheLongitudes(Double.valueOf((String) o.get("Longitudes")).doubleValue());
         geocache.setGeocacheLocationDescription((String) o.get("Description"));
         geocache.setDeleted(false) ;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -65,13 +68,14 @@ public class GeocacheController {
         }catch(Exception e){
             e.printStackTrace();
         }
-        geocache.setGeocacheDateOfUpload((java.sql.Date) createDate);
+        geocache.setGeocacheDateOfUpload(createDate);
         User user = userService.getUserByName((String) o.get("username"));
         geocache.setPid(user.getUserId());
         if(geocacheService.createGeocacheEntry(geocache)==1) {
-            return geocacheService.getLatestGeocacheIdByUser(user.getUserId());
+            String jsonString = "{\"generatedKey\":\""+geocacheService.getLatestGeocacheIdByUser(user.getUserId())+"\"}";
+            return jsonString;
         } else {
-            return 0;
+            return "{\"generatedKey\":0}";
         }
     }
 

@@ -30,7 +30,6 @@ public class UserController {
     EncryptUtil encryptUtil = new EncryptUtil();
 
 
-
     @RequestMapping("index")
     @ResponseBody
     public String index(){

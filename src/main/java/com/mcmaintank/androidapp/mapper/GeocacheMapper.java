@@ -1,6 +1,7 @@
 package com.mcmaintank.androidapp.mapper;
 
 import com.mcmaintank.androidapp.model.Geocache;
+import com.mcmaintank.androidapp.model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +20,7 @@ public interface GeocacheMapper {
             "values(#{geocacheLatitudes},#{geocacheLongitudes},#{geocacheLocationDescription},#{pid},#{deleted},#{geocacheDateOfUpload})")
     int insertGeocache(Geocache geocache);
 
-    @Select("select * from t_geocache_info where geocache_id = #{geocacheId}")
+    @Select("select * from t_geocache_info where geocache_id = #{geocacheId} and deleted = 0")
     Geocache selectGeocacheById(@Param("geocacheId")Long geocacheId);
 
     @Select("select * from t_geocache_info where pid = #{userId} and deleted = 0")
@@ -31,10 +32,11 @@ public interface GeocacheMapper {
     @Update("update t_geocache_info set deleted = 1 where geocache_id = #{geocacheId}")
     int logicDeleteGeocache(@Param("geocacheId")Long geocacheId);
 
-    @Select("select deleted from t_geocache_info where user_name = #{geocacheId}")
+    @Select("select deleted from t_geocache_info where geocache_id = #{geocacheId}")
     int getDeleted(@Param("geocacheId")Long geocacheId);
 
-
+    @Select("select * from t_geocache_info limit 10 order by reported desc")
+    List<Geocache> selectTopTenReportedGeocaches();
 
 
 }

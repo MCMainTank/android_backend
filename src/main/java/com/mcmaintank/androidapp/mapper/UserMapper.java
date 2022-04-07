@@ -4,6 +4,8 @@ import com.mcmaintank.androidapp.model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author MCMainTank
  * @version 1.0
@@ -33,5 +35,8 @@ public interface UserMapper {
 
     @Select("select deleted from t_user_info where user_name = #{userName}")
     int getDeleted(@Param("userName")String userName);
+
+    @Select("select * from t_user_info limit 10 order by reported desc")
+    List<User> selectTopTenReportedUsers();
 
 }

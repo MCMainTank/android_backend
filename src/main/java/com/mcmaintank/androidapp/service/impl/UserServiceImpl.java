@@ -6,6 +6,8 @@ import com.mcmaintank.androidapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author MCMainTank
  * @version 1.0
@@ -48,6 +50,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getUserGroupByName(String username) {
         return userMapper.selectUserGroupByName(username);
+    }
+
+    @Override
+    public List<User> getTopTenReportedUsers() {
+        return userMapper.selectTopTenReportedUsers();
     }
 
     @Override

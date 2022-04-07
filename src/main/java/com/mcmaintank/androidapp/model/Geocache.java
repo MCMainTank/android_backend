@@ -3,7 +3,7 @@ package com.mcmaintank.androidapp.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @author MCMainTank
@@ -31,6 +31,20 @@ public class Geocache {
     private boolean deleted;
 
     private Date geocacheDateOfUpload;
+
+    private Integer reported;
+
+    public void setGeocacheId(Long geocacheId){
+        this.geocacheId = geocacheId;
+    }
+
+    public boolean setGeocacheDateOfUpload(Date geocacheDateOfUpload){
+        if(geocacheDateOfUpload!=null){
+            this.geocacheDateOfUpload = geocacheDateOfUpload;
+            return true;
+        } else
+            return false;
+    }
 
     @Override
     public boolean equals(Object o) {

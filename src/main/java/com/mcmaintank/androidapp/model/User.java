@@ -25,6 +25,8 @@ public class User {
 
     private Integer userGroup;
 
+    private Integer reported;
+
     public boolean equals(Object o) {
         if (o instanceof User) {
             return (userName == ((User) o).userName);

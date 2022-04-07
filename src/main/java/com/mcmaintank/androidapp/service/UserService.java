@@ -2,6 +2,8 @@ package com.mcmaintank.androidapp.service;
 
 import com.mcmaintank.androidapp.model.User;
 
+import java.util.List;
+
 /**
  * @author MCMainTank
  * @version 1.0
@@ -18,6 +20,8 @@ public interface UserService {
     public int createUser(User user);
 
     public int getUserGroupByName(String username);
+
+    public List<User> getTopTenReportedUsers();
 
     int getDeleted(String username);
 
