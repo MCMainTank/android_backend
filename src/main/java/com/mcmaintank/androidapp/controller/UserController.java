@@ -78,7 +78,7 @@ public class UserController {
 
     @RequestMapping("register")
     @ResponseBody
-    public  String register(/*@RequestParam("username") String username,
+    public String register(/*@RequestParam("username") String username,
                           @RequestParam("password") String password,
                           @RequestParam("repass") String repass,
                           @RequestParam("userEmail") String userEmail,
@@ -95,50 +95,59 @@ public class UserController {
                                 user.setUserPassword(encryptUtil.encrypt(password));
                                 user.setUserGroup(0);
                                 if(userService.createUser(user)==1){
-                                    return "Success!";
+                                    String jsonString1 = "{\"kstatus\":1}";
+                                    return jsonString1;
                                 }else {
-                                    return "Failed to create new user!";
+                                    String jsonString2="{\"kstatus\":0}";
+                                    return jsonString2;
                                 }
                 } else {
-                    return "Please enter a password!";
+//                    return "Please enter a password!";
+                    String jsonString2="{\"kstatus\":0}";
+                    return jsonString2;
                 }
+
             }else {
-                return "Username taken!";
+//                return "Username taken!";
+                String jsonString2="{\"kstatus\":0}";
+                return jsonString2;
             }
         }else{
-            return "Please enter a username!";
+//            return "Please enter a username!";
+            String jsonString2="{\"kstatus\":0}";
+            return jsonString2;
         }
 //        return "username taken";
 //        return "success";
     }
 
-    @RequestMapping("searchForUser")
-    @ResponseBody
-    public User searchForUser(@RequestBody Map o){
-        Integer isAdmin = parseInt((String) o.get("isAdmin"));
-        if(isAdmin==1){
-            return userService.getUser(Long.parseLong((String) o.get("userId")));
-        }
-        else return null;
-    }
+//    @RequestMapping("searchForUser")
+//    @ResponseBody
+//    public User searchForUser(@RequestBody Map o){
+//        Integer isAdmin = parseInt((String) o.get("isAdmin"));
+//        if(isAdmin==1){
+//            return userService.getUser(Long.parseLong((String) o.get("userId")));
+//        }
+//        else return null;
+//    }
 
-    @RequestMapping("deleteUser")
-    @ResponseBody
-    public String deleteUser(@RequestBody Map o){
-        Integer isAdmin = parseInt((String) o.get("isAdmin"));
-        if(isAdmin==1){
-            if(userService.logicDeleteUser(Long.parseLong((String) o.get("userId")))==1){
-                String jsonString1 = "{\"kstatus\":1}";
-                return jsonString1;
-            } else {
-                String jsonString1 = "{\"kstatus\":2}";
-                return jsonString1;
-            }
-        } else {
-            String jsonString1 = "{\"kstatus\":0}";
-            return jsonString1;
-        }
-
-    }
+//    @RequestMapping("deleteUser")
+//    @ResponseBody
+//    public String deleteUser(@RequestBody Map o){
+//        Integer isAdmin = parseInt((String) o.get("isAdmin"));
+//        if(isAdmin==1){
+//            if(userService.logicDeleteUser(Long.parseLong((String) o.get("userId")))==1){
+//                String jsonString1 = "{\"kstatus\":1}";
+//                return jsonString1;
+//            } else {
+//                String jsonString1 = "{\"kstatus\":2}";
+//                return jsonString1;
+//            }
+//        } else {
+//            String jsonString1 = "{\"kstatus\":0}";
+//            return jsonString1;
+//        }
+//
+//    }
 
 }

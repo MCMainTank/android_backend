@@ -35,8 +35,17 @@ public interface GeocacheMapper {
     @Select("select deleted from t_geocache_info where geocache_id = #{geocacheId}")
     int getDeleted(@Param("geocacheId")Long geocacheId);
 
-    @Select("select * from t_geocache_info limit 10 order by reported desc")
+    @Select("SELECT * FROM t_geocache_info order by reported desc LIMIT 0,10")
     List<Geocache> selectTopTenReportedGeocaches();
+
+    @Update("update t_geocache_info set geocache_location_description = #{geocacheLocationDescription} where geocache_id = #{geocacheId}")
+    void updateGeocacheById(@Param("geocacheId")Long geocacheId,@Param("geocacheLocationDescription")String geocacheLocationDescription);
+
+    @Select("select sum(reported) from t_geocache_info where pid = #{pid} and deleted = 0")
+    int selectReportedSum(@Param("pid")Long pid);
+
+    @Update("update t_geocache_info set reported = reported+1 where geocache_id = #{geocacheId}")
+    void updateGeocacheReportedById(@Param("geocacheId")Long geocacheId);
 
 
 }

@@ -26,5 +26,9 @@ public interface GeocacheService {
 
     public List<Geocache> getTopTenReportedGeocaches();
 
+    public void changeGeocacheById(Long geocacheId, String geocacheLocationDescription);
+
+    int reportGeocache(Long geocacheId);
+
     int logicDeleteGeocache(Long geocacheId);
 }

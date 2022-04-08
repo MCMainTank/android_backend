@@ -1,6 +1,7 @@
 package com.mcmaintank.androidapp.service.impl;
 
 import com.mcmaintank.androidapp.mapper.GeocacheMapper;
+import com.mcmaintank.androidapp.mapper.UserMapper;
 import com.mcmaintank.androidapp.model.Geocache;
 import com.mcmaintank.androidapp.service.GeocacheService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ public class GeocacheServiceImpl implements GeocacheService {
 
     @Autowired
     GeocacheMapper geocacheMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public Geocache getGeocache(Long geocacheId) {
@@ -56,6 +59,21 @@ public class GeocacheServiceImpl implements GeocacheService {
     @Override
     public List<Geocache> getTopTenReportedGeocaches() {
         return geocacheMapper.selectTopTenReportedGeocaches();
+    }
+
+    @Override
+    public void changeGeocacheById(Long geocacheId, String geocacheLocationDescription) {
+        geocacheMapper.updateGeocacheById(geocacheId,geocacheLocationDescription);
+    }
+
+    @Override
+    public int reportGeocache(Long geocacheId) {
+        if(geocacheMapper.selectGeocacheById(geocacheId)!=null){
+            geocacheMapper.updateGeocacheReportedById(geocacheId);
+            Long pid = geocacheMapper.selectGeocacheById(geocacheId).getPid();
+            userMapper.updateUserReported(geocacheMapper.selectReportedSum(pid),pid);
+            return 1;
+        }else return 0;
     }
 
     @Override
