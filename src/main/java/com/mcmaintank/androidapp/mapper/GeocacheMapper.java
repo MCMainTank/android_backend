@@ -35,7 +35,7 @@ public interface GeocacheMapper {
     @Select("select deleted from t_geocache_info where geocache_id = #{geocacheId}")
     int getDeleted(@Param("geocacheId")Long geocacheId);
 
-    @Select("SELECT * FROM t_geocache_info order by reported desc LIMIT 0,10 where deleted = 0")
+    @Select("SELECT * FROM t_geocache_info where deleted = 0 order by reported desc LIMIT 0,10")
     List<Geocache> selectTopTenReportedGeocaches();
 
     @Update("update t_geocache_info set geocache_location_description = #{geocacheLocationDescription} where geocache_id = #{geocacheId}")

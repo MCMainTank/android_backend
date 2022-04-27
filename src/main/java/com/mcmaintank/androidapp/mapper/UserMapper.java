@@ -36,7 +36,7 @@ public interface UserMapper {
     @Select("select deleted from t_user_info where user_name = #{userName}")
     int getDeleted(@Param("userName")String userName);
 
-    @Select("SELECT * FROM t_user_info order by reported desc LIMIT 0,10 where deleted = 0")
+    @Select("SELECT * FROM t_user_info where deleted = 0 order by reported desc LIMIT 0,10")
     List<User> selectTopTenReportedUsers();
 
     @Update("update t_user_info set reported = #{reportedSum} where user_id = #{userId}")
