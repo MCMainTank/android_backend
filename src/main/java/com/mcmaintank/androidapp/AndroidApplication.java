@@ -1,4 +1,4 @@
-package com.mcmaintank.android;
+package com.mcmaintank.androidapp;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
