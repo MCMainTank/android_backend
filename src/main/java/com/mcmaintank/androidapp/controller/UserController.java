@@ -109,7 +109,7 @@ public class UserController {
 
             }else {
 //                return "Username taken!";
-                String jsonString2="{\"kstatus\":0}";
+                String jsonString2="{\"kstatus\":3}";
                 return jsonString2;
             }
         }else{

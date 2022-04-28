@@ -47,5 +47,8 @@ public interface GeocacheMapper {
     @Update("update t_geocache_info set reported = reported+1 where geocache_id = #{geocacheId}")
     void updateGeocacheReportedById(@Param("geocacheId")Long geocacheId);
 
+    @Select("select * from t_geocache_info where (geocache_latitudes between #{latLow} and #{latHigh}) and (geocache_longitudes between #{lonLow} and #{lonHigh})")
+    List<Geocache> selectGeocacheByLocation(@Param("latLow")Double latLow,@Param("latHigh")Double latHigh,@Param("lonLow")Double lonLow,@Param("lonHigh")Double lonHigh);
+
 
 }

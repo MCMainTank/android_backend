@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -122,9 +123,9 @@ public class GeocacheController {
 
     @RequestMapping(value = "getNearestGeocache")
     @ResponseBody
-    public Geocache getNearestGeocache(@RequestParam Map o){
-        Geocache geocache = geocacheService.getNearestGeocache((Double)o.get("Latitudes"),(Double) o.get("Longitudes"));
-        return geocache;
+    public List<Geocache> getNearestGeocache(@RequestBody Map o){
+        List<Geocache> geocacheList = geocacheService.getNearestGeocache(Double.valueOf((String) o.get("Latitudes")).doubleValue(),Double.valueOf((String) o.get("Longitudes")).doubleValue());
+        return geocacheList;
     }
 
     @RequestMapping(value = "reportGeocache")

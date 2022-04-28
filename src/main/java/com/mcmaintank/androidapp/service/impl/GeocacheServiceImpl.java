@@ -47,8 +47,8 @@ public class GeocacheServiceImpl implements GeocacheService {
     }
 
     @Override
-    public Geocache getNearestGeocache(Double latitudes, Double longitudes) {
-        return null;
+    public List<Geocache> getNearestGeocache(Double latitudes, Double longitudes) {
+        return geocacheMapper.selectGeocacheByLocation(latitudes-0.05,latitudes+0.05,longitudes-0.05,longitudes+0.05);
     }
 
     @Override

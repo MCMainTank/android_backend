@@ -20,7 +20,7 @@ public interface GeocacheService {
 
     int getLatestGeocacheIdByUser(Long userId);
 
-    public Geocache getNearestGeocache(Double latitudes, Double longitudes);
+    public List<Geocache> getNearestGeocache(Double latitudes, Double longitudes);
 
     int getDeleted(Long geocacheId);
 
