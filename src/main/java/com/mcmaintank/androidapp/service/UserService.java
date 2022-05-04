@@ -1,5 +1,6 @@
 package com.mcmaintank.androidapp.service;
 
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.User;
 
 import java.util.List;
@@ -26,4 +27,10 @@ public interface UserService {
     int getDeleted(String username);
 
     int logicDeleteUser(Long userId);
+
+    public int createActivity(Activity activity);
+
+    public int getLatestActivityIdByUser(String username);
+
+    public List<Activity> getUserActivity(String username);
 }

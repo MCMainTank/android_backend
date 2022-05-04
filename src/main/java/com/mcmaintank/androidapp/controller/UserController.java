@@ -1,5 +1,7 @@
 package com.mcmaintank.androidapp.controller;
 
+import com.mcmaintank.androidapp.model.Activity;
+import com.mcmaintank.androidapp.model.Geocache;
 import com.mcmaintank.androidapp.model.User;
 import com.mcmaintank.androidapp.service.UserService;
 import com.mcmaintank.androidapp.utils.EncryptUtil;
@@ -9,6 +11,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -149,5 +154,45 @@ public class UserController {
 //        }
 //
 //    }
+
+    @RequestMapping(value = "createActivity")
+    @ResponseBody
+    public String createGeocache(@RequestBody Map o){
+        Activity activity = new Activity();
+        activity.setActivityContent((String) o.get("contents"));
+        activity.setActivityType((String) o.get("type"));
+        activity.setUserId(userService.getUserByName((String) o.get("username")).getUserId());
+        activity.setGeocacheId(Long.parseLong((String) o.get("contents")));
+        activity.setDeleted(false) ;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date createDate = new Date();
+        try{
+            createDate = df.parse(df.format(new Date()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        activity.setActivityDateOfUpload(createDate);
+        User user = userService.getUserByName((String) o.get("username"));
+        if(userService.createActivity(activity)==1) {
+            String jsonString = "{\"generatedKey\":\""+userService.getLatestActivityIdByUser((String) o.get("username"))+"\"}";
+            return jsonString;
+        } else {
+            return "{\"generatedKey\":0}";
+        }
+    }
+
+    @RequestMapping(value = "createActivity")
+    @ResponseBody
+    public List<Activity> pullActivity(@RequestBody Map o){
+        String username = (String) o.get("username");
+        String password = (String) o.get("password");
+        if((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0) {
+            return userService.getUserActivity((String) o.get("username"));
+        } else {
+            return null;
+        }
+    }
+
+
 
 }

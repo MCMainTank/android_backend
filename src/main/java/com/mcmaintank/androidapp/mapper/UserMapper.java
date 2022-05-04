@@ -1,5 +1,6 @@
 package com.mcmaintank.androidapp.mapper;
 
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -41,5 +42,15 @@ public interface UserMapper {
 
     @Update("update t_user_info set reported = #{reportedSum} where user_id = #{userId}")
     void updateUserReported(@Param("reportedSum")Integer reportedSum,@Param("userId")Long userId);
+
+    @Insert("insert into t_activity_info(user_id,geocache_id,activity_type,activity_date,activity_content,deleted)"+
+            "values(#{userId},#{geocacheId},#{activityType},#{activityDate},#{activityContent},#{deleted}))")
+    int insertActivity(Activity activity);
+
+    @Select("select * from t_activity_info where user_id = #{userId}")
+    List<Activity> selectActivityByUserId(@Param("userId")Long userId);
+
+    @Select("select max(activity_id) from t_activity_info where user_id = #{userId} and deleted = 0")
+    int selectLatestActivityByUserName(@Param("userId")Long userId);
 
 }

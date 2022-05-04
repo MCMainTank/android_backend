@@ -1,6 +1,7 @@
 package com.mcmaintank.androidapp.service.impl;
 
 import com.mcmaintank.androidapp.mapper.UserMapper;
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.User;
 import com.mcmaintank.androidapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public int logicDeleteUser(Long userId){
         return userMapper.logicDeleteUser(userId);
+    }
+
+    @Override
+    public int createActivity(Activity activity) {
+        return userMapper.insertActivity(activity);
+    }
+
+    @Override
+    public int getLatestActivityIdByUser(String username) {
+        return userMapper.selectLatestActivityByUserName(userMapper.selectUserByName(username).getUserId());
+    }
+
+    @Override
+    public List<Activity> getUserActivity(String username) {
+        return userMapper.selectActivityByUserId(userMapper.selectUserByName(username).getUserId());
     }
 
 

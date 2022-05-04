@@ -27,6 +27,8 @@ public class User {
 
     private Integer reported;
 
+    private boolean deleted;
+
     public boolean equals(Object o) {
         if (o instanceof User) {
             return (userName == ((User) o).userName);
