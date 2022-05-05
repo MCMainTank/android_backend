@@ -25,6 +25,14 @@ public class Activity {
 
     private String activityContent;
 
+    public boolean setActivityDateOfUpload(Date activityDateOfUpload){
+        if(activityDateOfUpload!=null){
+            this.activityDateOfUpload = activityDateOfUpload;
+            return true;
+        } else
+            return false;
+    }
+
     private boolean deleted;
 
 }

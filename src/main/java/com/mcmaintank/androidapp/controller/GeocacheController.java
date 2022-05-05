@@ -134,8 +134,11 @@ public class GeocacheController {
         String username = (String) o.get("username");
         String password = (String) o.get("password");
         String geocacheIdString = (String) o.get("geocacheId");
-        if((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0){
+        if(((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0)&&(userService.getUserByName(username).getUserId()==(geocacheService.getGeocache(Long.parseLong(geocacheIdString)).getPid()))){
             geocacheService.reportGeocache(Long.parseLong(geocacheIdString));
+            String jsonString = "{\"kstatus\":2}";
+            return jsonString;
+        }else if(((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0)&&(userService.getUserByName(username).getUserId()!=(geocacheService.getGeocache(Long.parseLong(geocacheIdString)).getPid()))){
             String jsonString = "{\"kstatus\":1}";
             return jsonString;
         }else{

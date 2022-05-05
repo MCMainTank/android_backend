@@ -43,8 +43,8 @@ public interface UserMapper {
     @Update("update t_user_info set reported = #{reportedSum} where user_id = #{userId}")
     void updateUserReported(@Param("reportedSum")Integer reportedSum,@Param("userId")Long userId);
 
-    @Insert("insert into t_activity_info(user_id,geocache_id,activity_type,activity_date,activity_content,deleted)"+
-            "values(#{userId},#{geocacheId},#{activityType},#{activityDate},#{activityContent},#{deleted}))")
+    @Insert("insert into t_activity_info(user_id,geocache_id,activity_type,activity_date_of_upload,activity_content,deleted) "+
+            "values(#{userId},#{geocacheId},#{activityType},#{activityDateOfUpload},#{activityContent},#{deleted})")
     int insertActivity(Activity activity);
 
     @Select("select * from t_activity_info where user_id = #{userId}")

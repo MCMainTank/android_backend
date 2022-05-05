@@ -3,6 +3,7 @@ package com.mcmaintank.androidapp.controller;
 import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.Geocache;
 import com.mcmaintank.androidapp.model.User;
+import com.mcmaintank.androidapp.service.GeocacheService;
 import com.mcmaintank.androidapp.service.UserService;
 import com.mcmaintank.androidapp.utils.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    GeocacheService geocacheService;
 
     EncryptUtil encryptUtil = new EncryptUtil();
 
@@ -159,10 +165,13 @@ public class UserController {
     @ResponseBody
     public String createGeocache(@RequestBody Map o){
         Activity activity = new Activity();
+        Integer sign = 0;
         activity.setActivityContent((String) o.get("contents"));
         activity.setActivityType((String) o.get("type"));
-        activity.setUserId(userService.getUserByName((String) o.get("username")).getUserId());
-        activity.setGeocacheId(Long.parseLong((String) o.get("contents")));
+        String username = (String) o.get("username");
+        String password = (String) o.get("password");
+        activity.setUserId(userService.getUserByName(username).getUserId());
+        activity.setGeocacheId(Long.parseLong((String) o.get("geocacheId")));
         activity.setDeleted(false) ;
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date createDate = new Date();
@@ -173,15 +182,26 @@ public class UserController {
         }
         activity.setActivityDateOfUpload(createDate);
         User user = userService.getUserByName((String) o.get("username"));
-        if(userService.createActivity(activity)==1) {
+        List<Activity> activityList = new ArrayList<Activity>();
+        activityList = userService.getUserActivity(username);
+        for(int i=0;i<activityList.size();i++){
+            if(activityList.get(i).getGeocacheId()==activity.getGeocacheId()){
+                sign=1;
+            }
+        }
+        if((geocacheService.getGeocache(activity.getGeocacheId()).getPid()==userService.getUserByName(username).getUserId())&&sign==0) {
+            return "{\"generatedKey\":-1}";
+        } else if(sign==1){
+            return "{\"generatedKey\":-2}";
+        } else if((userService.createActivity(activity)==1&&((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0))&&geocacheService.getGeocache(activity.getGeocacheId()).getPid()!=userService.getUserByName(username).getUserId()&&sign==0) {
             String jsonString = "{\"generatedKey\":\""+userService.getLatestActivityIdByUser((String) o.get("username"))+"\"}";
             return jsonString;
-        } else {
+        }else{
             return "{\"generatedKey\":0}";
         }
     }
 
-    @RequestMapping(value = "createActivity")
+    @RequestMapping(value = "getActivity")
     @ResponseBody
     public List<Activity> pullActivity(@RequestBody Map o){
         String username = (String) o.get("username");
