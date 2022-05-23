@@ -2,6 +2,7 @@ package com.mcmaintank.androidapp.service.impl;
 
 import com.mcmaintank.androidapp.mapper.GeocacheMapper;
 import com.mcmaintank.androidapp.mapper.UserMapper;
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.Geocache;
 import com.mcmaintank.androidapp.service.GeocacheService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,18 +68,31 @@ public class GeocacheServiceImpl implements GeocacheService {
     }
 
     @Override
-    public int reportGeocache(Long geocacheId) {
-        if(geocacheMapper.selectGeocacheById(geocacheId)!=null){
-            geocacheMapper.updateGeocacheReportedById(geocacheId);
-            Long pid = geocacheMapper.selectGeocacheById(geocacheId).getPid();
-            userMapper.updateUserReported(geocacheMapper.selectReportedSum(pid),pid);
-            return 1;
+    public int reportGeocache(Activity activity) {
+        Integer reportId = 0;
+        if(geocacheMapper.selectGeocacheById(activity.getGeocacheId())!=null){
+            if(isReported(activity.getUserId(),activity.getGeocacheId())){
+                geocacheMapper.updateGeocacheReportedById(activity.getGeocacheId());
+                Long pid = geocacheMapper.selectGeocacheById(activity.getGeocacheId()).getPid();
+                userMapper.updateUserReported(geocacheMapper.selectReportedSum(pid),pid);
+                userMapper.insertActivity(activity);
+                return 1;
+            }else
+                return 2;
         }else return 0;
     }
 
     @Override
     public int logicDeleteGeocache(Long geocacheId){
         return geocacheMapper.logicDeleteGeocache(geocacheId);
+    }
+
+    @Override
+    public boolean isReported(Long geocacheId, Long userId) {
+        if(userMapper.selectReportActivityId(userId,geocacheId)==0){
+            return false;
+        }else
+            return true;
     }
 
 

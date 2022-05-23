@@ -163,7 +163,7 @@ public class UserController {
 
     @RequestMapping(value = "createActivity")
     @ResponseBody
-    public String createGeocache(@RequestBody Map o){
+    public String createActivity(@RequestBody Map o){
         Activity activity = new Activity();
         Integer sign = 0;
         activity.setActivityContent((String) o.get("contents"));

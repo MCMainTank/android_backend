@@ -53,4 +53,7 @@ public interface UserMapper {
     @Select("select max(activity_id) from t_activity_info where user_id = #{userId} and deleted = 0")
     int selectLatestActivityByUserName(@Param("userId")Long userId);
 
+    @Select("select max(activity_id) from t_activity_info where user_id = #{userId} and geocache_id = #{geocacheId} and activity_type = \"REPORT\"")
+    int selectReportActivityId(@Param("userId")Long userId,@Param("geocacheId")Long geocacheId);
+
 }

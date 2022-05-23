@@ -1,12 +1,15 @@
 package com.mcmaintank.androidapp.controller;
 
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.Geocache;
 import com.mcmaintank.androidapp.model.User;
+import com.mcmaintank.androidapp.service.GeocacheConsumerService;
 import com.mcmaintank.androidapp.service.GeocacheService;
 import com.mcmaintank.androidapp.service.UserService;
 import com.mcmaintank.androidapp.utils.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +37,12 @@ public class GeocacheController {
     GeocacheService geocacheService;
     @Autowired
     UserService userService;
+    @Autowired
+    GeocacheConsumerService geocacheConsumerService;
 
     EncryptUtil encryptUtil = new EncryptUtil();
+
+    private static final String JSON_TEST_URL = "https://restcountries.eu/rest/v2/name/australia";
 
 
     @RequestMapping(value = "getGeocache")
@@ -134,17 +141,53 @@ public class GeocacheController {
         String username = (String) o.get("username");
         String password = (String) o.get("password");
         String geocacheIdString = (String) o.get("geocacheId");
-        if(((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0)&&(userService.getUserByName(username).getUserId()==(geocacheService.getGeocache(Long.parseLong(geocacheIdString)).getPid()))){
-            geocacheService.reportGeocache(Long.parseLong(geocacheIdString));
-            String jsonString = "{\"kstatus\":2}";
-            return jsonString;
-        }else if(((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0)&&(userService.getUserByName(username).getUserId()!=(geocacheService.getGeocache(Long.parseLong(geocacheIdString)).getPid()))){
-            String jsonString = "{\"kstatus\":1}";
-            return jsonString;
+        Activity activity = new Activity();
+        Integer sign = 0;
+        activity.setActivityContent("Reported.");
+        activity.setActivityType("REPORT");
+        activity.setUserId(userService.getUserByName(username).getUserId());
+        activity.setGeocacheId(Long.parseLong((String) o.get("geocacheId")));
+        activity.setDeleted(false) ;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date createDate = new Date();
+        try{
+            createDate = df.parse(df.format(new Date()));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        activity.setActivityDateOfUpload(createDate);
+        if((userService.getPassword(username)).equals(encryptUtil.encrypt(password))&&userService.getDeleted(username)==0){
+            if(userService.getUserByName(username).getUserId()==(geocacheService.getGeocache(Long.parseLong(geocacheIdString)).getPid())){
+                String jsonString = "{\"kstatus\":2}";
+                return jsonString;
+            }else{
+                int reportResult = geocacheService.reportGeocache(activity);
+                if(reportResult==1){
+                    String jsonString = "{\"kstatus\":1}";
+                    return jsonString;
+                }else if(reportResult==2){
+                    String jsonString = "{\"kstatus\":3}";
+                    return jsonString;
+                }else{
+                    String jsonString = "{\"kstatus\":0}";
+                    return jsonString;
+                }
+            }
         }else{
             String jsonString = "{\"kstatus\":0}";
             return jsonString;
         }
+    }
+
+
+    @RequestMapping(value = "testConsumer")
+    @ResponseBody
+    public String testGeocacheConsumer(final Model model){
+        String url = "https://pfa.foreca.com//api/v1/location/search/";
+        String location = "london";
+        String responseString = geocacheConsumerService.testParse(url,location);
+        model.addAttribute("response",responseString);
+        return responseString;
     }
 
 

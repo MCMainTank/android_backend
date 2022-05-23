@@ -1,5 +1,6 @@
 package com.mcmaintank.androidapp.service;
 
+import com.mcmaintank.androidapp.model.Activity;
 import com.mcmaintank.androidapp.model.Geocache;
 
 import java.sql.Date;
@@ -28,7 +29,9 @@ public interface GeocacheService {
 
     public void changeGeocacheById(Long geocacheId, String geocacheLocationDescription);
 
-    int reportGeocache(Long geocacheId);
+    int reportGeocache(Activity activity);
 
     int logicDeleteGeocache(Long geocacheId);
+
+    boolean isReported(Long geocacheId, Long userId);
 }
